@@ -7,11 +7,16 @@
     "build": "next build",
     "lint": "next lint",
     "start": "nodemon index.js",
-    "preprocess": "npx hardhat run --network localhost scripts/deploy.js"
+    "public": "npx hardhat run --network localhost scripts/deploy.js",
+    "private": "npx hardhat run --network localhost scripts/deployPrivate.js"
   },
   "dependencies": {
     "@next/font": "13.2.4",
+    "axios": "^1.6.8",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
     "ethers": "^5.7.2",
+    "express": "^4.19.2",
     "hardhat": "^2.13.0",
     "next": "13.2.4",
     "react": "18.2.0",

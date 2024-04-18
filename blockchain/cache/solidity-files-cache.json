@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "D:\\projects\\majorp\\blockchain\\contracts\\Tracking.sol": {
-      "lastModificationDate": 1713010696494,
-      "contentHash": "533a758310cbffb1438d52d109c969ee",
-      "sourceName": "contracts/Tracking.sol",
+    "D:\\projects\\MajorP\\blockchain\\contracts\\CollegeBlockchain.sol": {
+      "lastModificationDate": 1713434373529,
+      "contentHash": "b8d2487c59a8e8e57ba8abf71bcd750a",
+      "sourceName": "contracts/CollegeBlockchain.sol",
       "solcConfig": {
         "version": "0.8.11",
         "settings": {
@@ -33,7 +33,44 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "Tracking"
+        "CollegeBlockchain"
+      ]
+    },
+    "D:\\projects\\MajorP\\blockchain\\contracts\\PublicBlockchain.sol": {
+      "lastModificationDate": 1713434446127,
+      "contentHash": "39582520efed701f2fd43ac01cdb0c3b",
+      "sourceName": "contracts/PublicBlockchain.sol",
+      "solcConfig": {
+        "version": "0.8.11",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./CollegeBlockchain.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "PublicBlockchain"
       ]
     }
   }
