@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\projects\\MajorP\\blockchain\\contracts\\CollegeBlockchain.sol": {
-      "lastModificationDate": 1713434373529,
-      "contentHash": "b8d2487c59a8e8e57ba8abf71bcd750a",
+      "lastModificationDate": 1713502354334,
+      "contentHash": "41ec02766897f1541675a8b97cb1eee7",
       "sourceName": "contracts/CollegeBlockchain.sol",
       "solcConfig": {
         "version": "0.8.11",
@@ -37,8 +37,8 @@
       ]
     },
     "D:\\projects\\MajorP\\blockchain\\contracts\\PublicBlockchain.sol": {
-      "lastModificationDate": 1713434446127,
-      "contentHash": "39582520efed701f2fd43ac01cdb0c3b",
+      "lastModificationDate": 1713503296153,
+      "contentHash": "9f03893d82c20bfd7d475c89badd113d",
       "sourceName": "contracts/PublicBlockchain.sol",
       "solcConfig": {
         "version": "0.8.11",
