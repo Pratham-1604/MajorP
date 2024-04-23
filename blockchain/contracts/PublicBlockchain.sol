@@ -11,6 +11,7 @@ contract PublicBlockchain {
     }
 
     struct Student {
+        uint collegeuid;
         string name;
         uint[] courseUids;
         mapping(uint => uint) grades;
@@ -43,7 +44,7 @@ contract PublicBlockchain {
         uint indexed courseUid,
         string name
     );
-    event CreditsIssued(uint studentId, string courseName, uint grades);
+    event CreditsIssued(uint studentId, string courseName, uint grades, uint clgId);
     event CollegeCreated(uint indexed collegeUid, string name);
     event StudentCreated(uint studentId, string name);
 
@@ -64,9 +65,13 @@ contract PublicBlockchain {
         return totalCourses;
     }
 
-    function createStudent(string memory _name) public returns (uint) {
+    function createStudent(
+        string memory _name,
+        uint clgId
+    ) public returns (uint) {
         totalStudents++;
         students[totalStudents].name = _name;
+        students[totalStudents].collegeuid = clgId;
         emit StudentCreated(totalStudents, _name);
         return totalStudents;
     }
@@ -86,7 +91,7 @@ contract PublicBlockchain {
         uint _studentId,
         string memory _courseName,
         uint _grades
-    ) public {
+    ) public returns (uint){
         uint courseUid = 0;
         for (uint i = 0; i < students[_studentId].courseUids.length; i++) {
             if (
@@ -102,7 +107,8 @@ contract PublicBlockchain {
         }
         require(courseUid != 0, "Course not found");
         students[_studentId].grades[courseUid] = _grades;
-        emit CreditsIssued(_studentId, _courseName, _grades);
+        emit CreditsIssued(_studentId, _courseName, _grades, students[_studentId].collegeuid);
+        return students[_studentId].collegeuid;
     }
 
     function getCourseDetails(
@@ -126,8 +132,12 @@ contract PublicBlockchain {
 
     function getStudentDetails(
         uint _studentId
-    ) public view returns (string memory, uint[] memory) {
-        return (students[_studentId].name, students[_studentId].courseUids);
+    ) public view returns (string memory, uint[] memory, uint) {
+        return (
+            students[_studentId].name,
+            students[_studentId].courseUids,
+            students[_studentId].collegeuid
+        );
     }
 
     function getNumberOfCoursesByInstitute(

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const blockchainRouter = require("./router/public");
+const privateRouter = require("./router/private");
 app.use(bodyParser.json());
 
 const port = 8080;
@@ -10,3 +11,4 @@ app.listen(port, () => {
 });
 
 app.use("/blockchain", blockchainRouter);
+app.use("/private", privateRouter);

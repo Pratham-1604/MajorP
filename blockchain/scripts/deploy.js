@@ -12,6 +12,15 @@ async function deployContracts() {
   const publicBlockchain = await PublicBlockchain.deploy();
   await publicBlockchain.deployed();
   console.log("Public Blockchain Contract Address:", publicBlockchain.address);
+  const CollegeBlockchain = await ethers.getContractFactory(
+    "CollegeBlockchain"
+  );
+  const collegeBlockchain = await CollegeBlockchain.deploy();
+  await collegeBlockchain.deployed();
+  console.log(
+    "Private Blockchain Contract Address:",
+    collegeBlockchain.address
+  );
 }
 
 deployContracts().catch((error) => {
