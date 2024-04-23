@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const blockchainRouter = require("./router/blockchain");
+const blockchainRouter = require("./router/public");
 app.use(bodyParser.json());
 
 const port = 8080;

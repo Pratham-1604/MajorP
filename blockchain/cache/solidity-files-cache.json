@@ -1,44 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "D:\\projects\\MajorP\\blockchain\\contracts\\CollegeBlockchain.sol": {
-      "lastModificationDate": 1713502354334,
-      "contentHash": "41ec02766897f1541675a8b97cb1eee7",
-      "sourceName": "contracts/CollegeBlockchain.sol",
-      "solcConfig": {
-        "version": "0.8.11",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "CollegeBlockchain"
-      ]
-    },
     "D:\\projects\\MajorP\\blockchain\\contracts\\PublicBlockchain.sol": {
-      "lastModificationDate": 1713503296153,
-      "contentHash": "9f03893d82c20bfd7d475c89badd113d",
+      "lastModificationDate": 1713896420577,
+      "contentHash": "a985c7a3cc2168521aab1771695116dc",
       "sourceName": "contracts/PublicBlockchain.sol",
       "solcConfig": {
         "version": "0.8.11",
@@ -63,9 +28,7 @@
           }
         }
       },
-      "imports": [
-        "./CollegeBlockchain.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],

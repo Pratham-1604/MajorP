@@ -1,17 +1,38 @@
 const router = require("express").Router();
+
 const {
-  newComplaint,
-  getComplaintDetail,
-  updateToAComplaint,
-} = require("../controllers/blockchain_crud");
+  addCourse,
+  createStudent,
+  enrollStudent,
+  issueCredits,
+  getCourseDetails,
+  getNumberOfStudentsEnrolled,
+  getStudentDetails,
+  getTotalStudents,
+  getAllStudentDetails,
+  addCollege,
+  getNumberOfCoursesByCollege,
+  getCollegeDetails,
+  getNumberOfColleges,
+  getStudentGrades,
+} = require("../controllers/public_controller");
 
-// Endpoint to create a new complaint
-router.post("/newComplaints", newComplaint);
+// Routes
+router.post("/addCourse", addCourse);
+router.get("/courseDetails/:courseId", getCourseDetails);
+router.get("/numberOfStudentsEnrolled/:courseId", getNumberOfStudentsEnrolled);
 
-// Endpoint to get details of a specific complaint
-router.get("/getComplaintDetail/:id", getComplaintDetail);
+router.post("/createStudent", createStudent);
+router.post("/enrollStudent", enrollStudent);
+router.get("/studentDetails/:studentId", getStudentDetails);
+router.get("/getStudentGrades/:studentId", getStudentGrades);
+router.get("/totalStudents", getTotalStudents);
+router.get("/allStudentDetails", getAllStudentDetails);
 
-// Endpoint to update a complaint
-router.put("/updateToAComplaints/:id", updateToAComplaint);
+router.post("/addCollege", addCollege);
+router.post("/issueCredits", issueCredits);
+router.get("/getNumberOfColleges", getNumberOfColleges);
+router.get("/getCollegeDetails/:collegeId", getCollegeDetails);
+router.get("/numberOfCoursesByCollege/:collegeId", getNumberOfCoursesByCollege);
 
 module.exports = router;
