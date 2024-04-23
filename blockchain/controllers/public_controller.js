@@ -1,4 +1,5 @@
 const ethers = require("ethers");
+const axios = require("axios");
 require("dotenv").config();
 
 const {
@@ -28,9 +29,9 @@ async function addCourse(req, res) {
 }
 
 async function createStudent(req, res) {
-  const { name } = req.body;
+  const { name, clgID } = req.body;
   try {
-    const tx = await contract.createStudent(name);
+    const tx = await contract.createStudent(name, clgID);
     const receipt = await tx.wait();
     console.log(receipt.events);
     const studentId = receipt.events[0].args.studentId;
@@ -58,11 +59,39 @@ async function enrollStudent(req, res) {
 async function issueCredits(req, res) {
   const { studentId, courseName, grades } = req.body;
   try {
-    await contract.issueCredits(studentId, courseName, grades);
-    res.status(200).json({ message: "Credits issued successfully" });
+    const tx = await contract.issueCredits(studentId, courseName, grades);
+    const receipt = await tx.wait();
+    const collegeuid = receipt.events[0].args.clgId.toNumber();
+    console.log("collegeuid: ", collegeuid);
+    const postData = {
+      studentId: collegeuid,
+      subject: courseName,
+      grade: grades,
+    };
+
+    const response = await axios.post(
+      "http://localhost:8080/private/issueCredits",
+      postData
+    );
+
+    res.status(200).json({
+      message: "Credits issued successfully",
+      collegeuid: collegeuid,
+      responseData: response.data, // Include response data from the POST request in the response
+    });
   } catch (error) {
+    // Handle error from contract function call or POST request
     console.error("Error issuing credits:", error);
-    res.status(500).json({ error: error.message });
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      res.status(error.response.status).json({ error: error.response.data });
+    } else if (error.request) {
+      // The request was made but no response was received
+      res.status(500).json({ error: "No response received from the server" });
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      res.status(500).json({ error: error.message });
+    }
   }
 }
 
@@ -92,7 +121,11 @@ async function getStudentDetails(req, res) {
   const studentId = req.params.studentId;
   try {
     const details = await contract.getStudentDetails(studentId);
-    res.status(200).json({ details });
+    res.status(200).json({
+      name: details[0],
+      courses: details[1].map((a) => a.toNumber()),
+      collegeUid: details[2].toNumber(),
+    });
   } catch (error) {
     console.error("Error getting student details:", error);
     res.status(500).json({ error: error.message });
