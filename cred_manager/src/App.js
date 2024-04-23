@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <Router>
-        <div className='fixed w-full'>
+        <div className='fixed w-full h-full'>
           <Navbar />
         </div>
         <Routes>
