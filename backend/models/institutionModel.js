@@ -8,6 +8,15 @@ const institutionSchema = new mongoose.Schema({
   },
   address: {
     type: String,
+    default: ""
+  },
+  password: {
+    type: String,
+    default: ""
+  },
+  logo: {
+    type: String,
+    default: ""
   }
 });
 

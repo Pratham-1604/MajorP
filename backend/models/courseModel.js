@@ -15,7 +15,7 @@ const courseSchema = new mongoose.Schema({
   },
   course_description: {
     type: String, 
-    default: "" // New field for course description
+    default: ""
   },
   instructors: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -36,8 +36,11 @@ const courseSchema = new mongoose.Schema({
   students_enrolled: {
     type: Number,
     default: 0
+  },
+  imgsrc: {
+    type: String,
+    default: ""
   }
-  // Add defaults for other fields as needed
 });
 
 const Course = mongoose.model('Course', courseSchema);
