@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import { server_url } from '../Utilities';
 
 export default function AddCourse() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function AddCourse() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/courses');
+        const response = await axios.get(`${server_url}/courses`);
 
         setCourseData(response.data);
       } catch (error) {
@@ -63,7 +64,7 @@ export default function AddCourse() {
     };
 
     // Send POST request to the backend
-    axios.post('http://localhost:3000/courses', sendData)
+    axios.post(`${server_url}/courses`, sendData)
       .then((response) => {
         console.log('Course added:', response.data);
         setCourseData([...courseData, response.data]);
@@ -80,7 +81,7 @@ export default function AddCourse() {
 
   const deleteCourse = (courseId) => {
     axios
-    .delete(`http://localhost:3000/courses/${courseId}`)
+    .delete(`${server_url}/courses/${courseId}`)
     .then((response) => {
       navigate('/');
       console.log('Course deleted:', response.data);
