@@ -21,9 +21,29 @@ module.exports = {
       },
     },
     variants: {
-      transform: ['hover'], // Enable hover variant for transform
-      translate: ['hover'], // Enable hover variant for translate
+      transform: ['hover'],
+      translate: ['hover'],
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.no-spinner': {
+          // Hide arrows in WebKit browsers (Chrome, Safari, Opera, etc.)
+          '&::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: '0',
+          },
+          '&::-webkit-outer-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: '0',
+          },
+          // Hide arrows in Firefox
+          '-moz-appearance': 'textfield',
+        },
+      };
+
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    },
+  ],
 }

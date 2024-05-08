@@ -8,27 +8,18 @@ const instructorSchema = new mongoose.Schema({
   },
   instructor_lastname: {
     type: String,
-    required: true
+    // required: true
   },
   email: {
     type: String,
-    required: true
-  },
-  DOB: {
-    type: Date,
-    default: Date.now() // Default value for Date of Birth
-  },
-  address: {
-    type: String,
-    default: "" // Default value for address
+    // required: true
   },
   education: [{
-    type: String // List of strings for education
+    type: String
   }],
   institution: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Institution',
-    required: true
   }
 });
 

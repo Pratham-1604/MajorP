@@ -1,9 +1,12 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './Institute/Navbar';
 import AddCourse from './Institute/AddCourse';
 import InstProfile from './Institute/InstProfile';
 import Course from './Institute/Course';
+import AboutUs from './Institute/AboutUs';
+import Login from './Institute/Registration/Login';
+import Register from './Institute/Registration/Register';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -13,9 +16,12 @@ function App() {
           <Navbar />
         </div>
         <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route exact path='/' element={<AddCourse />} />
-          <Route exact path='/institute_profile' element={<InstProfile />} />
-          <Route exact path='/course/:courseId' element={<Course />} />
+          <Route path='/institute_profile' element={<InstProfile />} />
+          <Route path='/about' element={<AboutUs />} />
+          <Route path='/:courseId' element={<Course />} />
         </Routes>
       </Router>
     </>

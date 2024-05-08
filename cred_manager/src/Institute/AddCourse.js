@@ -1,94 +1,164 @@
-import React, { useState } from "react";
-import {
-    Link
-  } from "react-router-dom";
-
-  const courseData = [
-    {
-        C_id: "0",
-        instructor_name: "John Doe",
-        imgsrc:
-            "https://prod-discovery.edx-cdn.org/cdn-cgi/image/width=378,height=auto,quality=85,format=webp/media/course/image/49da3125-a471-4615-b9fe-693f045f8d38-aa7ff35be196.png",
-        title: "Fundamentals of Data Structure",
-        students_enrolled: "5",
-        credits: 3,
-    },
-    {
-        C_id: "1",
-        instructor_name: "Jane Smith",
-        imgsrc:
-            "https://www.digitalvidya.com/blog/wp-content/uploads/2017/05/Data_Analytics_Applications.webp",
-        title: "Data Analytics For Business Applications",
-        students_enrolled: "5",
-        credits: 4,
-    },
-    // {
-    //     C_id: "1",
-    //     instructor_name: "Jane Smith",
-    //     imgsrc:
-    //         "https://m.media-amazon.com/images/M/MV5BM2NlNzUyODUtZDgyNS00ZjU3LWI5NGUtOWFkYmQwMGVlNGRmXkEyXkFqcGdeQXVyMTE2MTc3MzU1._V1_.jpg",
-    //     title: "Course_2",
-    //     students_enrolled: "5",
-    //     credits: 4,
-    // },
-];
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
 
 export default function AddCourse() {
-    const [coursebutton, setcoursebutton] = useState(false);
-    const submit = (e) => {
-        e.preventDefault();
-        setcoursebutton(false);
-    }
+  const navigate = useNavigate();
+  const [courseData, setCourseData] = useState([{
+    _id: "0",
+    course_name: "Fundamentals of Data Structure",
+    students_enrolled: "5",
+    course_credits: 3,
+  }]);
 
-    return (
-        <div className="bg-darkbg text-white pt-24 min-h-[100vh]">
-            <div className="flex flex-col p-10">
-                <h1 className="cursor-default text-3xl px-6 font-bold">Courses</h1>
-                <ul className="flex flex-row flex-wrap gap-x-24 gap-y-0">
-                    {courseData.map((val, key) => (
-                        <Link
-                            key={val.C_id}
-                            className="text-white w-[500px] flex bg-lightbg items-center text-center rounded-lg cursor-pointer m-4 py-5 px-5 transition-all duration-250 ease-in-out hover:text-black hover:relative hover:bg-white hover:font-bold hover:transform hover:scale-[1.2] hover:translate-x-[40px] hover:translate-y-[-5px]"
-                            to={`/course/${val.C_id}`}>
+  const [courseButton, setCourseButton] = useState(false);
+  const [Course_name, setCourse_name] = useState("");
+  const [Course_credit, setCourse_credit] = useState("");
+  const [img_add, setimg_add] = useState("");
+  const [course_hover, setcourse_hover] = useState(-1);
 
-                            <div className="h-20 w-20 rounded-lg bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${val.imgsrc})` }} />
-                            <span className="text-lg my-0.5 mx-3.5">{val.title}</span>
-                            <span className="hidden">{val.students_enrolled}</span>
-                        </Link>
-                    ))}
-                </ul>
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/courses');
 
-                <div
-                    onClick={() => setcoursebutton(!coursebutton)}
-                    className="rounded-lg mx-8 py-3 px-5 cursor-pointer shadow-white hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max"
-                >Add Course</div>
+        setCourseData(response.data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        setCourseData([]);
+      }
+    };
 
-                <form className={coursebutton ? "bg-white absolute rounded-xl flex flex-col justify-center text-black py-8 px-16 top-[150px] left-[470px] z-20" : "hidden"} onSubmit={submit}>
-                    <h1 className="cursor-default text-3xl my-3 px-6 font-bold" >Add Course</h1>
-                    <div className="m-4">
-                        <label htmlFor="title">Course Title : </label>
-                        <input type="text" placeholder="Title" autoComplete="off" className="outline-none text mx-2 border-b-2 border-gray-500" id="task" />
-                    </div>
+    fetchCourses();
+  }, []);
 
-                    <div className="m-4">
-                        <label htmlFor="description">Instrutor Name : </label>
-                        <input placeholder="Name" type="text" autoComplete="off" className="outline-none text mx-2 border-b-2 border-gray-500" id="desc" />
-                    </div>
+  const onDrop = (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        const reader = new FileReader();
 
-                    <div className="m-4">
-                        <label>Upload an Image : </label>
-                        <input className="mx-2" type="file" name="image" accept="image/*" />
-                    </div>
+        reader.onloadend = () => {
+          setimg_add(reader.result);
+        };
 
-                    <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
-                        <p>Add Course</p>
-                    </button>
-                </form>
-                {coursebutton === true ? (<>
-                    <div onClick={() => setcoursebutton(false)} className="fixed top-0 left-0 h-screen w-screen bg-[rgba(0,0,0,0.3)] z-10"></div>
-                </>) : 
-                <></>}
-            </div>
-        </div>
-    );
+        reader.readAsDataURL(file);
+      }
+    };
+
+  const {getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: 'image/*',
+    multiple: false,
+  });
+
+  const submit = (e) => {
+    e.preventDefault();
+
+    const sendData = {
+      course_name: Course_name,
+      course_credits: parseInt(Course_credit),
+      imgsrc: img_add,
+      institution: '662809a5f955d2b12d9bf567',
+    };
+
+    // Send POST request to the backend
+    axios.post('http://localhost:3000/courses', sendData)
+      .then((response) => {
+        console.log('Course added:', response.data);
+        setCourseData([...courseData, response.data]);
+        // Reset form after successful submission
+        setCourse_name('');
+        setCourse_credit('');
+        setimg_add('');
+      })
+      .catch((error) => {
+        console.error('Error adding course:', error);
+      });
+    setCourseButton(false);
+  };
+
+  const deleteCourse = (courseId) => {
+    axios
+    .delete(`http://localhost:3000/courses/${courseId}`)
+    .then((response) => {
+      navigate('/');
+      console.log('Course deleted:', response.data);
+      setCourseData((prevData) => prevData.filter(val => val._id !== courseId));
+      })
+      .catch((error) => {
+        console.error('Error deleting course:', error);
+      });
+  };
+
+  return (
+    <div className="bg-darkbg text-white pt-24 min-h-[100vh]">
+      <div className="flex flex-col p-10">
+        <h1 className="cursor-default text-3xl px-6 font-bold">Courses</h1>
+        <ul className="flex flex-row flex-wrap gap-x-24 gap-y-0">
+
+          {courseData.map((val) => (
+            <Link
+              key={val._id}
+              onMouseEnter={() => setcourse_hover(val._id)}
+              onMouseLeave={() => setcourse_hover(-1)}
+              className="text-white w-[520px] flex bg-lightbg items-center rounded-lg cursor-pointer mx-8 my-4 py-4 px-4 transition-all duration-250 ease-in-out hover:text-black hover:relative hover:bg-white hover:font-bold hover:transform hover:scale-[1.2] hover:translate-x-[40px] hover:translate-y-[0px]"
+              to={`/${val._id}`}
+            >
+              <div
+                className="h-20 w-32 rounded-lg bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${val.imgsrc})` }}
+              />
+              <span className="text-lg font-semibold text-wrap w-[40%] my-0.5 mx-3.5">{val.course_name}</span>
+              <span className={course_hover === val._id ? "w-[16%] text-md text-wrap my-0.5 mx-3 opacity-100 transition-all duration-100 ease-in-out" : "opacity-0 transition-all duration-100 ease-in-out"}>Credits: {val.course_credits}</span>
+
+              <i onClick={() => deleteCourse(val._id)} className={course_hover === val._id ? "ri-delete-bin-2-fill hover:transform hover:scale-[1.4] text-2xl opacity-100 transition-all duration-100 ease-in-out" : "ri-delete-bin-2-fill text-2xl opacity-0 transition-all duration-100 ease-in-out"}></i>
+            </Link>
+          ))}
+        </ul>
+
+        <div onClick={() => setCourseButton(!courseButton)}
+          className="w-max rounded-lg px-4 py-4 cursor-pointer border border-darkbg hover:border hover:border-gray-200 hover:bg-lightbg transition-all duration-250 ease-in-out" >Add Course</div>
+
+        <form
+          className={
+            courseButton
+              ? 'bg-darkbg border border-white absolute rounded-xl flex flex-col justify-center text-white py-8 px-16 top-[150px] left-[470px] z-20'
+              : 'hidden'
+          }
+          onSubmit={submit}
+        >
+          <h1 className="cursor-default text-3xl my-3 px-6 font-bold">Add Course</h1>
+          <div className="m-2">
+            <label htmlFor="title">Course Title: </label>
+            <input type="text" onChange={(e) => setCourse_name(e.target.value)} value={Course_name} placeholder="Title" autoComplete="off" className="bg-darkbg outline-none text mx-2 border-b-2 border-gray-500" />
+          </div>
+
+          <div className="m-2">
+            <label htmlFor="credits">Course Credits: </label>
+            <input placeholder="credits" type='number' onChange={(e) => setCourse_credit(e.target.value)} value={Course_credit} autoComplete="off" className="bg-darkbg outline-none text mx-2 border-b-2 border-gray-500 no-spinner" />
+          </div>
+
+          <div {...getRootProps()} className="m-2 border-2 border-dashed border-white p-5 text-center">
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the file here...</p>
+            ) : (
+              <p>Drag & drop an image here, or click to select a file</p>
+            )}
+          </div>
+
+          <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
+            Add Course
+          </button>
+        </form>
+
+        {courseButton ? (
+          <div onClick={() => setCourseButton(false)} className="fixed top-0 left-0 h-screen w-screen bg-[rgba(0,0,0,0.66)] z-10"></div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
+  );
 }
