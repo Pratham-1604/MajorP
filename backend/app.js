@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/database');
+const cors = require('cors');
 
 const courseRoutes = require('./routes/courseRoutes');
 const studentRoutes = require('./routes/studentRoutes');
@@ -12,12 +13,13 @@ const credentialRoutes = require('./routes/credentialRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 
 const errorMiddleware = require('./middleware/errorMiddleware');
-const { PORT } = require('./config/environment'); // Import PORT from environment.js
+const { PORT } = require('./config/environment');
 
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 // Connect to the database
 connectDB();
