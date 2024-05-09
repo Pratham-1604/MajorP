@@ -4,6 +4,7 @@ import {
     Link
 } from "react-router-dom";
 import axios from 'axios';
+import { server_url } from '../Utilities';
 
 const studentData = [
     {
@@ -60,7 +61,7 @@ const Course = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/courses/${courseId}`);
+                const response = await axios.get(`${server_url}/courses/${courseId}`);
                 setCourseData(response.data);
             } catch (error) {
                 console.error('Error fetching course:', error);
@@ -108,7 +109,7 @@ const Course = () => {
             imgsrc: img_add,
         }
         try {
-            await axios.put(`http://localhost:3000/courses/${courseId}`, updateCourseData);
+            await axios.put(`${server_url}/courses/${courseId}`, updateCourseData);
         } catch (error) {
             console.error('Error updating course:', error);
         }
@@ -129,13 +130,13 @@ const Course = () => {
         }
         if (courseData.instructors[0]) {
             try {
-                await axios.put(`http://localhost:3000/instructors/${courseData.instructors[0]._id}`, updateInstData);
+                await axios.put(`${server_url}/instructors/${courseData.instructors[0]._id}`, updateInstData);
             } catch (error) {
                 console.error('Error updating course:', error);
             }
         } else {
             try {
-                const response = await axios.post('http://localhost:3000/instructors/', updateInstData);
+                const response = await axios.post(`${server_url}/instructors/`, updateInstData);
                 // alert(response.data._id);
                 updateCourseData.instructors = [response.data._id];
             } catch (error) {
@@ -145,7 +146,7 @@ const Course = () => {
         }
         
         try {
-            await axios.put(`http://localhost:3000/courses/${courseId}`, updateCourseData);
+            await axios.put(`${server_url}/courses/${courseId}`, updateCourseData);
         } catch (error) {
             console.error('Error updating course:', error);
         }
