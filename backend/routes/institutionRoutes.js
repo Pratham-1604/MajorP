@@ -13,6 +13,9 @@ router.get('/:id', institutionController.getInstitutionById);
 // POST a new institution
 router.post('/', institutionController.createInstitution);
 
+//POST for institution login
+router.post('/login', institutionController.institutionLogin);
+
 // PUT (update) an institution
 router.put('/:id', institutionController.updateInstitution);
 
