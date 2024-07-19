@@ -4,6 +4,6 @@ require("dotenv").config();
 module.exports = {
   PORT: process.env.PORT || 3001,
   MONGODB_URI:
-    process.env.MONGODB_URI || "mongodb+srv://dhirajmuppineti486:HlkvwJhB8VkMjL76@applications.eaxfxvs.mongodb.net/CMS",
+    process.env.MONGODB_URI || "mongodb://localhost:27017/mydatabase",
   JWT_SECRET: process.env.JWT_SECRET || "10",
 };
