@@ -9,6 +9,10 @@ export default function Login() {
     const [Visibility, setVisibility] = useState(false);
     const [Message, setMessage] = useState("");
 
+    const handleRegister = () => {
+        navigate("/register");
+    };
+
     const submit = async (e) => {
         e.preventDefault();
         const sendData = {
@@ -62,8 +66,12 @@ export default function Login() {
                 <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
                     Login
                 </button>
+                <button onClick={handleRegister} className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
+                    Register
+                </button>
+                
             </form>
-
+            
             <Link to="/" className="cursor-default fixed top-0 left-0 h-screen w-screen bg-[rgba(0,0,0,0.66)] z-10">
             </Link>
         </div>

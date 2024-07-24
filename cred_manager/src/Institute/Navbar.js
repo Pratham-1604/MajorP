@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Navbar = () => {
   const [selectTab, setselectTab] = useState(0);
-  const [login, setlogin] = useState(false);
+  const [login, setlogin] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -28,7 +28,7 @@ const Home = () => {
         </div>
 
         <div className="bg-darkbg top-0 flex gap-4 items-center shadow-lg p-5">
-          {login ?
+          {/* {login ?
             <>
               <button className="rounded-lg px-4 py-2 cursor-pointer border border-darkbg hover:border hover:border-gray-200 hover:bg-lightbg transition-all duration-250 ease-in-out" onClick={handleLogout}>Logout</button>
 
@@ -39,11 +39,15 @@ const Home = () => {
 
               <Link to="/register" className="rounded-lg px-4 py-2 cursor-pointer border border-darkbg hover:border hover:border-gray-200 hover:bg-lightbg transition-all duration-250 ease-in-out">Register</Link>
             </>
-          }
+          } */}
+          <button className="rounded-lg px-4 py-2 cursor-pointer border border-darkbg hover:border hover:border-gray-200 hover:bg-lightbg transition-all duration-250 ease-in-out" onClick={handleLogout}>Logout</button>
+
+          <Link onClick={() => setselectTab(2)} to="/institute_profile" className={selectTab === 2 ? "rounded-lg px-4 py-2 cursor-pointer border border-gray-200 bg-lightbg transition-all duration-250 ease-in-out" : "rounded-lg px-4 py-2 cursor-pointer border border-darkbg hover:border hover:border-gray-200 hover:bg-lightbg transition-all duration-250 ease-in-out"}><i className="ri-user-line text-2xl"></i></Link>
+            
         </div>
       </nav>
     </div>
   );
 };
 
-export default Home;
+export default Navbar;

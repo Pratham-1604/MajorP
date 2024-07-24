@@ -31,6 +31,10 @@ exports.getInstitutionById = async (req, res, next) => {
 exports.createInstitution = async (req, res, next) => {
   try {
     const institution = new Institution(req.body);
+    const hashedPassword = await bcrypt.hash(institution.password, +JWT_SECRET);
+    institution.password = hashedPassword;
+    console.log(institution);
+    console.log(institution.password);
     await institution.save();
     res.status(201).json(institution);
   } catch (err) {
