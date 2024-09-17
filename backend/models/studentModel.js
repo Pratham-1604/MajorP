@@ -42,7 +42,7 @@ const studentSchema = new mongoose.Schema({
     ref: 'Credential'
   }],
   semester: {
-    type: Number // New field for semester
+    type: Number 
   },
   institution: {
     type: mongoose.Schema.Types.ObjectId,

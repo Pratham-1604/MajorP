@@ -36,7 +36,7 @@ export default function Register() {
         
 
         // Send POST request to the backend
-        axios.post('http://localhost:3000/institutions', sendData)
+        axios.post('http://localhost:3001/institutions', sendData)
             .then((response) => {
                 console.log('Institute added:', response.data);
                 setInstitutedata([...Institutedata, response.data]);
@@ -44,12 +44,17 @@ export default function Register() {
                 setAddress('');
                 setPassword('');
                 setRePassword('');
+                navigate('/');
             })
             .catch((error) => {
                 console.error('Error adding institute:', error);
             });
-        navigate('/');
+        
     };
+
+    const handleLogin = () => {
+        navigate("/login")
+    }
 
     return (
         <div>
@@ -95,6 +100,9 @@ export default function Register() {
 
                 <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer border border-darkbg hover:border hover:border-white hover:bg-lightbg transition-all duration-250 ease-in-out w-max">
                     Register
+                </button>
+                <button onClick={handleLogin} className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
+                    Login
                 </button>
             </form>
 
