@@ -22,4 +22,6 @@ router.delete('/:id', courseController.deleteCourse);
 // Calculate weighted sum of grades for a student in a specific course
 router.get('/weightedSum/:studentId/:courseId', courseController.calculateWeightedSum);
 
+// Filter by institution ID
+router.get('/institute/:institutionId', courseController.getCoursesByInstitutionId); 
 module.exports = router;
