@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import CoursesList from './CoursesList'; // Import the CoursesList component
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -22,7 +23,6 @@ export default function HomePage() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                // const response = await axios.get(`http://localhost:3001/institutions/${institutionId}`);
                 setInstitution(response.data);
             } catch (err) {
                 setError('Error fetching institution data: ' + (err.response?.data?.message || 'Unknown error'));
@@ -42,13 +42,11 @@ export default function HomePage() {
     }
 
     return (
+        <div>
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Institution Details</h1>
-            <div className="border p-4 mb-2 rounded">
-                <p><strong>Name:</strong> {institution.institution_name}</p>
-                <p><strong>Email:</strong> {institution.email}</p>
-                {/* Add more fields as needed */}
-            </div>
+            <CoursesList institutionId={institution._id} />
         </div>
+        </div>
+        
     );
 }

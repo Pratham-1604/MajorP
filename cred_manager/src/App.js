@@ -7,6 +7,7 @@ import AboutUs from "./Institute/AboutUs";
 import Login from "./Institute/Registration/Login";
 import Logout from "./Institute/Registration/Logout";
 import Register from "./Institute/Registration/Register";
+import CoursesList from "./Institute/CoursesList";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -26,7 +27,9 @@ function App() {
           <Route exact path="/add_course" element={<AddCourse />} />
           <Route path="/institute_profile" element={<InstProfile />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/:courseId" element={<Course />} />
+          <Route path="/courses/:courseId" element={<Course />} />
+          <Route path="/courses" element={<CoursesList />} />
+
         </Routes>
       </Router>
     </>
