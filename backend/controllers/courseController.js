@@ -1,11 +1,33 @@
-// controllers/courseController.js
 const Course = require('../models/courseModel');
+const mongoose = require('mongoose');
 
 // GET all courses
 exports.getAllCourses = async (req, res, next) => {
   try {
     const courses = await Course.find().populate('instructors subjects tests institution');
     res.json(courses);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getCoursesByInstitutionId = async (req, res, next) => {
+  try {
+    const institutionId = req.params.institutionId; // Get the institution ID from query params
+    // Check if institutionId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(institutionId)) {
+      return res.status(400).json({ error: 'Invalid institution ID format.' });
+    }
+
+    // Convert the string to ObjectId
+    const convertedInstitutionId = new mongoose.Types.ObjectId(institutionId);
+
+    // Fetch courses by institution ID
+    const courses = await Course.find({ institution: convertedInstitutionId }) // Filter courses by institution
+      .populate('instructors subjects tests institution');
+    
+    res.json(courses);
+    console.log(req.query);
   } catch (err) {
     next(err);
   }
@@ -64,7 +86,6 @@ exports.deleteCourse = async (req, res, next) => {
   }
 };
 
-
 const Test = require('../models/testModel');
 const Grade = require('../models/gradeModel');
 
@@ -92,4 +113,3 @@ exports.calculateWeightedSum = async (req, res, next) => {
     next(error);
   }
 };
-
