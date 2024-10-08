@@ -6,6 +6,10 @@ import { server_url } from '../Utilities';
 
 export default function AddCourse() {
   const navigate = useNavigate();
+
+  const [institution, setInstitution] = useState(null);
+  const [error, setError] = useState('');
+
   const [courseData, setCourseData] = useState([{
     _id: "0",
     course_name: "Fundamentals of Data Structure",
@@ -19,35 +23,75 @@ export default function AddCourse() {
   const [img_add, setimg_add] = useState("");
   const [course_hover, setcourse_hover] = useState(-1);
 
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     try {
+  //       const response = await axios.get(`${server_url}/courses`);
+
+  //       setCourseData(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching courses:', error);
+  //       setCourseData([]);
+  //     }
+  //   };
+
+  //   fetchCourses();
+  // }, []);
+
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const institutionId = localStorage.getItem('institutionId');
+
+    // Check for authentication
+    if (!token || !institutionId) {
+      navigate('/login');
+      return;
+    }
+
+    // Fetch institution data
+    const fetchInstitutionData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/institutions/${institutionId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setInstitution(response.data);
+      } catch (err) {
+        setError('Error fetching institution data: ' + (err.response?.data?.message || 'Unknown error'));
+        console.error('Error fetching institution data:', err);
+      }
+    };
+
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${server_url}/courses`);
-
+        const response = await axios.get(`http://localhost:3001/courses/institute/${institutionId}`);
         setCourseData(response.data);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-        setCourseData([]);
+      } catch (err) {
+        setError('Error fetching courses: ' + (err.response?.data?.message || err));
+        console.error('Error fetching courses:', err);
       }
     };
 
+
+    fetchInstitutionData();
     fetchCourses();
-  }, []);
+  }, [navigate]);
 
   const onDrop = (acceptedFiles) => {
-      if (acceptedFiles.length > 0) {
-        const file = acceptedFiles[0];
-        const reader = new FileReader();
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+      const reader = new FileReader();
 
-        reader.onloadend = () => {
-          setimg_add(reader.result);
-        };
+      reader.onloadend = () => {
+        setimg_add(reader.result);
+      };
 
-        reader.readAsDataURL(file);
-      }
-    };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  const {getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: 'image/*',
     multiple: false,
@@ -60,15 +104,13 @@ export default function AddCourse() {
       course_name: Course_name,
       course_credits: parseInt(Course_credit),
       imgsrc: img_add,
-      institution: '662809a5f955d2b12d9bf567',
+      institution: institution._id,
     };
 
-    // Send POST request to the backend
     axios.post(`${server_url}/courses`, sendData)
       .then((response) => {
         console.log('Course added:', response.data);
         setCourseData([...courseData, response.data]);
-        // Reset form after successful submission
         setCourse_name('');
         setCourse_credit('');
         setimg_add('');
@@ -81,11 +123,11 @@ export default function AddCourse() {
 
   const deleteCourse = (courseId) => {
     axios
-    .delete(`${server_url}/courses/${courseId}`)
-    .then((response) => {
-      navigate('/');
-      console.log('Course deleted:', response.data);
-      setCourseData((prevData) => prevData.filter(val => val._id !== courseId));
+      .delete(`${server_url}/courses/${courseId}`)
+      .then((response) => {
+        navigate('/');
+        console.log('Course deleted:', response.data);
+        setCourseData((prevData) => prevData.filter(val => val._id !== courseId));
       })
       .catch((error) => {
         console.error('Error deleting course:', error);
@@ -104,7 +146,7 @@ export default function AddCourse() {
               onMouseEnter={() => setcourse_hover(val._id)}
               onMouseLeave={() => setcourse_hover(-1)}
               className="text-white w-[520px] flex bg-lightbg items-center rounded-lg cursor-pointer mx-8 my-4 py-4 px-4 transition-all duration-250 ease-in-out hover:text-black hover:relative hover:bg-white hover:font-bold hover:transform hover:scale-[1.2] hover:translate-x-[40px] hover:translate-y-[0px]"
-              to={`/${val._id}`}
+              to={`/courses/${val._id}`}
             >
               <div
                 className="h-20 w-32 rounded-lg bg-cover bg-center bg-no-repeat"
@@ -140,14 +182,19 @@ export default function AddCourse() {
             <input placeholder="credits" type='number' onChange={(e) => setCourse_credit(e.target.value)} value={Course_credit} autoComplete="off" className="bg-darkbg outline-none text mx-2 border-b-2 border-gray-500 no-spinner" />
           </div>
 
-          <div {...getRootProps()} className="m-2 border-2 border-dashed border-white p-5 text-center">
+          <div className="m-2">
+            <label htmlFor="title">Course Img: </label>
+            <input type="text" onChange={(e) => setimg_add(e.target.value)} value={img_add} placeholder="Add" autoComplete="off" className="bg-darkbg outline-none text mx-2 border-b-2 border-gray-500" />
+          </div>
+
+          {/* <div {...getRootProps()} className="m-2 border-2 border-dashed border-white p-5 text-center">
             <input {...getInputProps()} />
             {isDragActive ? (
               <p>Drop the file here...</p>
             ) : (
               <p>Drag & drop an image here, or click to select a file</p>
             )}
-          </div>
+          </div> */}
 
           <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
             Add Course
