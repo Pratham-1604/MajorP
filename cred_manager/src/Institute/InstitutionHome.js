@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CoursesList from './CoursesList';
+import Navbar from './Navbar';
 
 const InstitutionHome = () => {
   const [institution, setInstitution] = useState(null);
@@ -41,6 +42,9 @@ const InstitutionHome = () => {
 
   return (
     <div>
+    <div className="fixed w-full">
+          <Navbar />
+    </div>
       <div className="container mx-auto p-4">
         <CoursesList institutionId={institution._id} />
       </div>

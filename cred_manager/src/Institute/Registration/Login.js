@@ -26,6 +26,7 @@ export default function Login() {
             const institutionId = response.data.institution.id;
 
             localStorage.setItem('authToken', token);
+            localStorage.setItem('login', "Institute");
             localStorage.setItem('id', institutionId);
             setMessage('Login successful. Welcome ' + response.data.institution.name);
             navigate('/institution_home');

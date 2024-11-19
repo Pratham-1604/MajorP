@@ -27,6 +27,7 @@ export default function Login() {
             const studentId = response.data.student.id; // Assuming the response contains institution_id
 
             localStorage.setItem('authToken', token);
+            localStorage.setItem('login', "Student");
             localStorage.setItem('id', studentId);
             console.log(token);
             console.log(studentId);

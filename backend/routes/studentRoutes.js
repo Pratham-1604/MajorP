@@ -1,25 +1,37 @@
 // routes/studentsRoutes.js
 const express = require('express');
+const authenticate = require('../middleware/authMiddleware');
 const studentController = require('../controllers/studentController');
 
 const router = express.Router();
 
-// GET all studentss
-router.get('/', studentController.getAllStudents);
+// GET all students (authentication not required, unless needed)
+router.get('/', authenticate, studentController.getAllStudents);
 
-// GET a specific students by ID
-router.get('/:id', studentController.getStudentById);
+// POST for student login (authentication not required)
+router.post('/login', studentController.studentLogin);
 
-// POST a new students
+// POST for student registration (authentication not required)
+router.post('/register', studentController.studentRegister);
+
+// GET the logged-in student's profile (authentication required)
+router.get('/profile', authenticate, studentController.getProfile);
+
+// PUT to update the logged-in student's profile (authentication required)
+router.put('/profile', authenticate, studentController.updateProfile);
+
+// GET a specific student by ID
+router.get('/:id', authenticate, studentController.getStudentById);
+
+// POST a new student (authentication may not be needed for registration)
 router.post('/', studentController.createStudent);
 
-// PUT i.e. update/create students
-router.put('/:id', studentController.updateStudent);
+// PUT i.e. update/create student (authentication required)
+router.put('/:id', authenticate, studentController.updateStudent);
 
-// DELETE a students
-router.delete('/:id', studentController.deleteStudent);
+// DELETE a student (authentication required)
+router.delete('/:id', authenticate, studentController.deleteStudent);
 
-//POST for student login
-router.post('/login', studentController.studentLogin);
+
 
 module.exports = router;

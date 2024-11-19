@@ -1,10 +1,11 @@
 const Course = require('../models/courseModel');
+const Student = require('../models/studentModel');
 const mongoose = require('mongoose');
 
 // GET all courses
 exports.getAllCourses = async (req, res, next) => {
   try {
-    const courses = await Course.find().populate('instructors subjects tests institution');
+    const courses = await Course.find().populate('instructors subjects tests institution students_enrolled');
     res.json(courses);
   } catch (err) {
     next(err);
@@ -37,7 +38,7 @@ exports.getCoursesByInstitutionId = async (req, res, next) => {
 exports.getCourseById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const course = await Course.findById(id).populate('instructors subjects tests institution');
+    const course = await Course.findById(id).populate('instructors subjects tests institution students_enrolled');
     if (!course) {
       return res.status(404).json({ error: 'Course not found' });
     }
@@ -113,3 +114,54 @@ exports.calculateWeightedSum = async (req, res, next) => {
     next(error);
   }
 };
+
+
+exports.bulkFetchCourses = async (req, res, next) => {
+  const { courseIds } = req.body;
+  try {
+    const courses = await Course.find({ _id: { $in: courseIds } });
+    res.json(courses);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+exports.enrollInCourse = async (req, res, next) => {
+  try {
+    const { studentId } = req.body;
+    const { courseId } = req.params;
+    console.log(studentId);
+    console.log(courseId);
+    // Find the course by ID
+    const course = await Course.findById(courseId);
+    console.log(course);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Find the student by ID
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    
+    if (!course.students_enrolled.includes(studentId)) {
+      course.students_enrolled.push(studentId);
+      await course.save();
+    }
+
+    // Add the course to the student's enrolled courses
+    if (!student.courses_enrolled.includes(courseId)) {
+      student.courses_enrolled.push(courseId);
+      await student.save();
+    }
+    
+
+    res.status(200).json({ message: "Enrollment successful" });
+  } catch (err) {
+    console.error(err);
+    // next(err)
+  }
+}
