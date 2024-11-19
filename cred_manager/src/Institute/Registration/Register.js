@@ -57,10 +57,10 @@ export default function Register() {
     }
 
     return (
-        <div>
+        <div className='flex justify-center items-center h-screen'>
             <form 
             onSubmit={submit}
-            className='bg-darkbg border border-white absolute rounded-xl flex flex-col justify-center items-center text-white py-8 px-16 top-[150px] left-[470px] z-20 h-96'>
+            className='bg-darkbg border border-white absolute rounded-xl flex flex-col justify-center items-center text-white py-8 px-16 z-20 h-96'>
                 <h1 className="cursor-default text-3xl my-3 px-6 font-bold">Register</h1>
                 <div className="m-2 w-full border-b-2 border-gray-500">
                     <label htmlFor="name">Institute Name : </label>
@@ -98,12 +98,14 @@ export default function Register() {
                     </div>
                 </div>
 
-                <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer border border-darkbg hover:border hover:border-white hover:bg-lightbg transition-all duration-250 ease-in-out w-max">
-                    Register
-                </button>
-                <button onClick={handleLogin} className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border-lightbg hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
-                    Login
-                </button>
+                <div className='flex flex-row justify-between m-2'>
+                    <button type="submit" className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer shadow-2xl hover:shadow-none border border-lightbg hover:border hover:border-gray-100 bg-lightbg transition-all duration-250 ease-in-out w-max">
+                        Register
+                    </button>
+                    <button onClick={handleLogin} className="text-white rounded-lg mx-6 py-3 px-5 cursor-pointer border border-darkbg hover:border hover:border-white hover:bg-lightbg transition-all duration-250 ease-in-out w-max">
+                        Login
+                    </button>
+                </div>
             </form>
 
             <Link to="/" className="cursor-default fixed top-0 left-0 h-screen w-screen bg-[rgba(0,0,0,0.66)] z-10">
