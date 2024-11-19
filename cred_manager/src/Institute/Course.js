@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     Link
 } from "react-router-dom";
@@ -50,6 +50,8 @@ const studentData = [
 ];
 
 const Course = () => {
+
+    const navigate = useNavigate();
 
     // Course Credentials
     const { courseId } = useParams();
@@ -151,6 +153,7 @@ const Course = () => {
             console.error('Error updating course:', error);
         }
         settabbutton(0);
+        navigate(`/courses/${courseId}`)
     };
 
     if (!courseData) {

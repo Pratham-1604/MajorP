@@ -1,0 +1,52 @@
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+    background-color: black; /* Black background */
+    color: white; /* White text color */
+  }
+  
+  .form-container {
+    background-color: #1a1a1a; /* Dark gray background for the form */
+    border: 2px solid #ffffff; /* White border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding inside the container */
+    width: 400px; /* Set a fixed width for the container */
+  }
+  
+  .input-group {
+    display: flex; /* Use flexbox to arrange elements in a row */
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px; /* Space between input groups */
+  }
+  
+  label {
+    margin-right: 10px; /* Space between the label and input */
+    white-space: nowrap; /* Prevent label wrapping */
+  }
+  
+  input {
+    width: 100px; /* Fixed width for input fields */
+    padding: 5px; /* Padding for input fields */
+    margin-right: 10px; /* Space between inputs */
+    border: 1px solid #ccc; /* Light gray border for inputs */
+    border-radius: 5px; /* Rounded corners for inputs */
+    background-color: #333; /* Darker background for inputs */
+    color: white; /* White text color for inputs */
+  }
+  
+  button {
+    background-color: #4CAF50; /* Green background for the button */
+    color: white; /* White text color for the button */
+    padding: 10px; /* Padding for the button */
+    border: none; /* No border for the button */
+    border-radius: 5px; /* Rounded corners for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-top: 10px; /* Margin for button */
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  

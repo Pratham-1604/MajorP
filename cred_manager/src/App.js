@@ -1,5 +1,5 @@
 import Navbar from "./Institute/Navbar";
-import Home from "./Institute/Home";
+// import Home from "./Institute/Home";
 import AddCourse from "./Institute/AddCourse";
 import InstProfile from "./Institute/InstProfile";
 import Course from "./Institute/Course";
