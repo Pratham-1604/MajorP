@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { api } from "./utilities";
-import { useDarkMode } from "../context/themeContext"; // Import useDarkMode hook
+import { useDarkMode } from "../../context/themeContext"; // Import useDarkMode hook
+import Navbar from "./navbar";
 
 const IssueCredits = () => {
   const [studentId, setStudentId] = useState("");
@@ -25,9 +26,7 @@ const IssueCredits = () => {
 
   const fetchStudentDetails = async () => {
     try {
-      const response = await axios.get(
-        `${api}/studentDetails/${studentId}`
-      );
+      const response = await axios.get(`${api}/studentDetails/${studentId}`);
       setStudentDetails(response.data);
     } catch (error) {
       console.error("Error getting student details:", error);
@@ -112,68 +111,71 @@ const IssueCredits = () => {
   };
 
   return (
-    <div
-      className={`min-h-screen flex ${
-        darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
-      }`}
-    >
+    <>
+      <Navbar />
       <div
-        className={`container mx-auto mt-8 ${
-          darkMode ? "text-white" : "text-black"
+        className={`min-h-screen flex ${
+          darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
         }`}
       >
-        <h2 className="text-2xl font-bold mb-4">Issue Credits</h2>
-        <form onSubmit={handleSubmit} className="mb-4">
-          <input
-            type="text"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            placeholder="Enter student ID"
-            className={`border rounded-md p-2 w-full mb-2 ${
-              darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-            }`}
-            required
-          />
-          {studentDetails && <p>{studentDetails.name}</p>}
-          <input
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            placeholder="Enter subject"
-            className={`border rounded-md p-2 w-full mb-2 ${
-              darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-            }`}
-            required
-          />
-          <input
-            type="text"
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
-            placeholder="Enter grade"
-            className={`border rounded-md p-2 w-full mb-2 ${
-              darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-            }`}
-            required
-          />
-          <button
-            type="submit"
-            className={`bg-blue-500 text-white font-bold py-2 px-4 rounded ${
-              darkMode ? "hover:bg-blue-700" : "hover:bg-blue-400"
-            }`}
-            disabled={loading}
-          >
-            {loading ? "Issuing..." : "Issue"}
-          </button>
-        </form>
-        {error && <p className="text-red-500">{error}</p>}
-        {semester && issuedSubject && (
-          <p className="text-green-500">
-            Credits issued for {issuedSubject} in semester {semester}
-          </p>
-        )}
-        {renderGradesTables()}
+        <div
+          className={`container mx-auto mt-8 ${
+            darkMode ? "text-white" : "text-black"
+          }`}
+        >
+          <h2 className="text-2xl font-bold mb-4">Issue Credits</h2>
+          <form onSubmit={handleSubmit} className="mb-4">
+            <input
+              type="text"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              placeholder="Enter student ID"
+              className={`border rounded-md p-2 w-full mb-2 ${
+                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+              }`}
+              required
+            />
+            {studentDetails && <p>{studentDetails.name}</p>}
+            <input
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              placeholder="Enter subject"
+              className={`border rounded-md p-2 w-full mb-2 ${
+                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+              }`}
+              required
+            />
+            <input
+              type="text"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              placeholder="Enter grade"
+              className={`border rounded-md p-2 w-full mb-2 ${
+                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+              }`}
+              required
+            />
+            <button
+              type="submit"
+              className={`bg-blue-500 text-white font-bold py-2 px-4 rounded ${
+                darkMode ? "hover:bg-blue-700" : "hover:bg-blue-400"
+              }`}
+              disabled={loading}
+            >
+              {loading ? "Issuing..." : "Issue"}
+            </button>
+          </form>
+          {error && <p className="text-red-500">{error}</p>}
+          {semester && issuedSubject && (
+            <p className="text-green-500">
+              Credits issued for {issuedSubject} in semester {semester}
+            </p>
+          )}
+          {renderGradesTables()}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
