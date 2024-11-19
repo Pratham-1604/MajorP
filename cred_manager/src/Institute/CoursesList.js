@@ -11,7 +11,7 @@ const CoursesList = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    const institutionId = localStorage.getItem('institutionId');
+    const institutionId = localStorage.getItem('id');
 
     // Check for authentication
     if (!token || !institutionId) {

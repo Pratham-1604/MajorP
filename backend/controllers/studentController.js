@@ -69,3 +69,35 @@ exports.deleteStudent = async (req, res, next) => {
     next(err);
   }
 };
+
+//POST for login
+exports.studentLogin = async (req, res, next) => {
+  try {
+    console.log(req.body)
+    const { student_name, password } = req.body;
+
+    // Find the institution by name
+    const student = await Student.findOne({ student_name });
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Check if the password is correct
+    const isMatch = await bcrypt.compare(password, student.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { studentId: student._id, student_name: student_name },
+      JWT_SECRET, // Ensure you have this environment variable set
+      { expiresIn: '1h' } // Token expiration time
+    );
+
+    // Send response with token
+    res.json({ token, student: { id: student._id, name: student_name} });
+  } catch (err) {
+    next(err);
+  }
+};

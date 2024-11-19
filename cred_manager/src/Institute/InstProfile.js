@@ -9,7 +9,7 @@ const InstProfile = () => {
   useEffect(() => {
         const fetchInstitution = async () => {
             const token = localStorage.getItem('authToken');
-            const institutionId = localStorage.getItem('institutionId');
+            const institutionId = localStorage.getItem('id');
             if (!token || !institutionId) {
                 navigate('/login');
                 return;

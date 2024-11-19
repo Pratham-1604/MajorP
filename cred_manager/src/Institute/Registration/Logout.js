@@ -10,7 +10,7 @@ const Logout = () => {
     localStorage.removeItem("authToken");
 
     // Redirect to the login page
-    navigate("/login");
+    navigate("/");
   }, [navigate]);
 
   return null; // This component doesn't render anything
