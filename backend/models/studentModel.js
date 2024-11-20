@@ -1,4 +1,3 @@
-// models/studentModel.js
 const mongoose = require('mongoose');
 const Course = require('./courseModel');
 const Institution = require('./institutionModel');
@@ -31,24 +30,35 @@ const studentSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true
   },
   courses_enrolled: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
+    ref: 'Course',
+    validate: {
+      validator: mongoose.Types.ObjectId.isValid,
+      message: props => `${props.value} is not a valid ObjectId`
+    }
   }],
   credentials_earned: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Credential'
+    ref: 'Credential',
+    validate: {
+      validator: mongoose.Types.ObjectId.isValid,
+      message: props => `${props.value} is not a valid ObjectId`
+    }
   }],
   semester: {
-    type: Number 
+    type: Number
   },
   institution: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Institution',
     required: true
-  }
+  },
+  password: {
+    type: String,
+    default: ""
+  },
 });
 
 const Student = mongoose.model('Student', studentSchema);

@@ -3,6 +3,7 @@ const Instructor = require('./instructorModel');
 const Subject = require('./subjectModel');
 const Test = require('./testModel');
 const Institution = require('./institutionModel');
+const Student = require('./studentModel'); // Assuming you have a Student model
 
 const courseSchema = new mongoose.Schema({
   course_name: {
@@ -33,10 +34,10 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Institution'
   },
-  students_enrolled: {
-    type: Number,
-    default: 0
-  },
+  students_enrolled: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Student' // Reference to the Student model
+  }],
   imgsrc: {
     type: String,
     default: ""

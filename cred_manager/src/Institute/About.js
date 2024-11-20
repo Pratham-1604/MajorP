@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './Navbar';
 
-const InstProfile = () => {
-  const navigate = useNavigate();
-  const [institution, setInstitution] = useState(null);
-  const [error, setError] = useState('');
-  useEffect(() => {
+const About = () => {
+    const navigate = useNavigate();
+    const [institution, setInstitution] = useState(null);
+    const [error, setError] = useState('');
+    useEffect(() => {
         const fetchInstitution = async () => {
             const token = localStorage.getItem('authToken');
-            const institutionId = localStorage.getItem('institutionId');
+            const institutionId = localStorage.getItem('id');
             if (!token || !institutionId) {
                 navigate('/login');
                 return;
@@ -40,17 +41,22 @@ const InstProfile = () => {
         return <p>Loading...</p>;
     }
 
-  return (
-    <div className='pt-28 bg-darkbg text-white'>
-      <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Institution Details</h1>
-            <div className="border p-4 mb-2 rounded">
-                <p><strong>Name:</strong> {institution.institution_name}</p>
-                <p><strong>Address:</strong> {institution.address}</p>
+    return (
+        <div>
+            <div className="fixed w-full">
+                <Navbar />
+            </div>
+            <div className='pt-28 bg-darkbg text-white'>
+                <div className="container mx-auto p-4">
+                    <h1 className="text-3xl font-bold mb-4">Institution Details</h1>
+                    <div className="border p-4 mb-2 rounded">
+                        <p><strong>Name:</strong> {institution.institution_name}</p>
+                        <p><strong>Address:</strong> {institution.address}</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-  )
+    )
 }
 
-export default InstProfile
+export default About
