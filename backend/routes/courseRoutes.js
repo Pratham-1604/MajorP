@@ -24,4 +24,10 @@ router.get('/weightedSum/:studentId/:courseId', courseController.calculateWeight
 
 // Filter by institution ID
 router.get('/institute/:institutionId', courseController.getCoursesByInstitutionId); 
+
+//Bulk fetch courses
+router.post('/bulk-fetch', courseController.bulkFetchCourses);
+
+//Enroll
+router.post('/enroll/:courseId', courseController.enrollInCourse);
 module.exports = router;
