@@ -14,7 +14,7 @@ const App = () => {
     <DarkModeProvider>
       <Router>
         <Routes>
-          <Route path="/auth" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/create-student" element={<CreateStudent />} />
           <Route path="/get-student-details" element={<GetStudentDetails />} />
           <Route path="/issue-credits" element={<IssueCredits />} />
