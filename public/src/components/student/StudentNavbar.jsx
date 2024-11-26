@@ -34,6 +34,18 @@ const StudentNavbar = () => {
           >
             Select Subjects
           </Link>
+          <Link
+            to="/student-degree"
+            className="nav-button bg-gray-700 px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Get Degree
+          </Link>
+          <Link
+            to="/marksheet-qr"
+            className="nav-button bg-gray-700 mx-2 px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Marksheet QR
+          </Link>
           <button
             onClick={handleLogout}
             className={`nav-button bg-gray-700 mx-2 px-4 py-2 rounded hover:bg-gray-600`}

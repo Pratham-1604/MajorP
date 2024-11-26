@@ -4,12 +4,6 @@ import axios from "axios";
 import { api } from "../utilities";
 import { useDarkMode } from "../../context/themeContext";
 import StudentNavbar from "./StudentNavbar";
-import jsPDF from "jspdf";
-import { create } from "ipfs-http-client";
-import QRCode from "qrcode.react";
-
-// Initialize IPFS client
-const ipfs = create({ url: "https://ipfs.infura.io:5001/api/v0" });
 
 const GradesDisplay = () => {
   const [studentDetails, setStudentDetails] = useState(null);
@@ -61,8 +55,7 @@ const GradesDisplay = () => {
 
   const handleGenerateMarksheet = () => {
     if (studentDetails) {
-      const { uid, generalDetails, subjectDetails, academicDetails } =
-        studentDetails;
+      const { uid, generalDetails, subjectDetails } = studentDetails;
       const name = `${generalDetails.firstName} ${generalDetails.lastName}`;
 
       // Group subjects by semester
@@ -100,8 +93,6 @@ const GradesDisplay = () => {
       });
     }
   };
-
-  
 
   // Calculate CGPA history
   const calculateCGPAHistory = (subjectsBySemester) => {

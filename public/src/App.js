@@ -13,6 +13,8 @@ import CompleteProfile from "./components/student/CompleteProfile.jsx";
 import GradeCard from './components/student/GradeCard.jsx'
 import GradesDisplay from "./components/student/GradesDisplay.jsx";
 import SubjectSelection from "./components/student/SubjectSelection.jsx";
+import GetDegree from "./components/student/GetDegree.jsx";
+import GenerateMarksheetQR from "./components/student/GenerateMarksheetQR.jsx";
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
             <Route path="/issue-credits" element={<IssueCredits />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
             <Route path="/subject-selection" element={<SubjectSelection />} />
+            <Route path="/student-degree" element={<GetDegree />} />
+            <Route path="/marksheet-qr" element={<GenerateMarksheetQR />} />
             <Route
               path="/get-student-details/"
               element={<GetStudentDetails />}

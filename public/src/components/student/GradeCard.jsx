@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { QRCodeCanvas } from "qrcode.react";
 import { useLocation } from "react-router-dom";
 import { useDarkMode } from "../../context/themeContext";
 import jsPDF from "jspdf";
@@ -98,14 +97,6 @@ const GradeCard = () => {
                 <strong>Program:</strong> B.Tech Computer Science and
                 Engineering
               </p>
-            </div>
-
-            {/* QR Code aligned to the right */}
-            <div className="ml-6 p-2 border border-gray-400">
-              <QRCodeCanvas
-                value="https://example.com/verify/2021600047"
-                size={80}
-              />
             </div>
           </div>
 
