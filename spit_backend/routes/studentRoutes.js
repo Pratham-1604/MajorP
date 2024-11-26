@@ -8,7 +8,8 @@ const {
   updateStudentProfile,
   assignStudentGrades,
   incrementStudentSemester,
-  appendMarksheetLink,
+  getAvailableElectiveSubjects,
+  addSubjectsForSemester,
 } = require("../controllers/studentController");
 
 // Existing routes
@@ -22,5 +23,7 @@ router.put("/:uid/update", updateStudentProfile);
 
 router.post("/:uid/assign-grades", assignStudentGrades);
 router.post("/:uid/increment-semester", incrementStudentSemester);
+router.get("/:uid/available-electives", getAvailableElectiveSubjects);
+router.post("/:uid/add-semester-subjects", addSubjectsForSemester);
 
 module.exports = router;

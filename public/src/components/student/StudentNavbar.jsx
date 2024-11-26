@@ -13,7 +13,7 @@ const StudentNavbar = () => {
     <nav>
       <div
         className={`bg-${
-          darkMode ? "gray-900" : "gray-800"
+          darkMode ? "gray-950" : "gray-800"
         } text-white flex justify-between items-center px-4 py-2`}
       >
         <div className="college-name text-2xl">
@@ -27,6 +27,12 @@ const StudentNavbar = () => {
             className="nav-button bg-gray-700 px-4 py-2 rounded hover:bg-gray-600"
           >
             Get Grades
+          </Link>
+          <Link
+            to="/subject-selection"
+            className="nav-button bg-gray-700 mx-2 px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Select Subjects
           </Link>
           <button
             onClick={handleLogout}
