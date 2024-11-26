@@ -18,6 +18,8 @@ const Course = () => {
     const [Course_name, setCourse_name] = useState("");
     const [Course_credit, setCourse_credit] = useState("");
     const [img_add, setimg_add] = useState("");
+    const [grades, setGrades] = useState({}); // Track grades for each student
+
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -39,6 +41,15 @@ const Course = () => {
     const [InstructorName, setInstructorName] = useState("");
     const [InstructorLastName, setInstructorLastName] = useState("");
     const [InstructorEmail, setInstructorEmail] = useState("");
+
+    // Handle grade input change
+    const handleGradeChange = (studentId, value) => {
+
+        setGrades((prev) => ({
+            ...prev,
+            [studentId]: value, // Update grade for the specific student
+        }));
+    };
 
     const handleCourseButtonClick = () => {
         settabbutton(3);
@@ -115,6 +126,47 @@ const Course = () => {
         navigate(`/courses/${courseId}`)
     };
 
+    const handleStudentClick = async () => {
+        courseData.students_enrolled.map(async (stud) => {
+            const res = await axios.get(`${server_url}/grades/${stud._id}/${courseId}`);
+            console.log(res.data);
+            handleGradeChange(stud._id, res.data.grade);
+        });
+    }
+
+    // Handle grade assignment
+    const handleAssignGrades = async (studentId) => {
+        console.log(studentId, courseId);
+        const grade = grades[studentId]; // Get the grade for the specific student
+        if (!grade) {
+            alert('Please enter a grade before assigning.');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('authToken'); // Replace with appropriate token retrieval logic
+            const response = await axios.post(
+                `http://localhost:3001/grades/assign_grades`,
+                {
+                    student_id: studentId,
+                    course_id: courseId,
+                    grade,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            alert(`Grade ${grade} assigned successfully for Student ID: ${studentId}`);
+        } catch (err) {
+            console.error('Error assigning grade:', err);
+            alert(`Error assigning grade: ${err.response?.data?.message || 'Unknown error'}`);
+        }
+    };
+
+
+
     if (!courseData) {
         return <div>Course not found</div>;
     } else {
@@ -139,7 +191,7 @@ const Course = () => {
 
                             <Link className={tabbutton === 1 ? "cursor-pointer border bg-lightbg rounded-lg px-3 py-2 font-bold text-xl transform scale-[1.05] translate-x-[7px]" : "cursor-pointer border hover:bg-lightbg hover:transform hover:scale-[1.05] hover:translate-x-[7px] rounded-lg px-3 py-2 font-bold text-xl transition-all duration-250 ease-in-out"} onClick={() => settabbutton(1)}>Instructor Profile</Link>
 
-                            <Link className={tabbutton === 2 ? "cursor-pointer border bg-lightbg rounded-lg px-3 py-2 font-bold text-xl transform scale-[1.05] translate-x-[7px]" : "cursor-pointer border hover:bg-lightbg hover:transform hover:scale-[1.05] hover:translate-x-[7px] rounded-lg px-3 py-2 font-bold text-xl transition-all duration-250 ease-in-out"} onClick={() => settabbutton(2)}>Students List</Link>
+                            <Link className={tabbutton === 2 ? "cursor-pointer border bg-lightbg rounded-lg px-3 py-2 font-bold text-xl transform scale-[1.05] translate-x-[7px]" : "cursor-pointer border hover:bg-lightbg hover:transform hover:scale-[1.05] hover:translate-x-[7px] rounded-lg px-3 py-2 font-bold text-xl transition-all duration-250 ease-in-out"} onClick={() => {handleStudentClick(); settabbutton(2);}}>Students List</Link>
 
                             <Link className={tabbutton === 3 ? "cursor-pointer border bg-lightbg rounded-lg px-3 py-2 font-bold text-xl transform scale-[1.05] translate-x-[7px]" : "cursor-pointer border hover:bg-lightbg hover:transform hover:scale-[1.05] hover:translate-x-[7px] rounded-lg px-3 py-2 font-bold text-xl transition-all duration-250 ease-in-out"} onClick={handleCourseButtonClick} >Edit Course</Link>
 
@@ -210,19 +262,45 @@ const Course = () => {
                             </div>
 
                             {/* Students List */}
-                            <div className={tabbutton === 2 ? "h-[100%] w-[100%] bg-[#323253] flex flex-col gap-3 rounded-xl p-4 overflow-y-auto" : "hidden"} >
+                            <div className={tabbutton === 2 ? "h-[100%] w-[100%] bg-[#323253] flex flex-col gap-3 rounded-xl p-4 overflow-y-auto" : "hidden"} 
+                        >
                                 {courseData.students_enrolled.map((stud) => (
-                                    <Link
-                                        key={stud.Student_id}
-                                        onMouseEnter={() => setStud_hover(stud.Student_id)}
+                                    <div
+                                        key={stud._id}
+                                        onMouseEnter={() => setStud_hover(stud._id)}
                                         onMouseLeave={() => setStud_hover(-1)}
-                                        className="text-white w-[50%] flex gap-4 bg-lightbg items-center text-center rounded-lg cursor-pointer mx-4 py-5 pl-2 pr-5 transition-all duration-250 ease-in-out hover:text-black hover:relative hover:bg-white hover:font-bold hover:transform hover:scale-[1.2] hover:translate-x-[40px] hover:translate-y-[-5px]"
+                                        className="text-white w-[90%] flex gap-4 bg-lightbg items-center text-center rounded-lg cursor-pointer mx-4 py-5 pl-2 pr-5 transition-all duration-250 ease-in-out hover:text-black hover:relative hover:bg-white hover:font-bold hover:transform hover:scale-[1.2] hover:translate-x-[40px] hover:translate-y-[-5px]"
                                     >
                                         <h1 className='w-[50%]' >{stud.student_firstname.concat(" ", stud.student_lastname)}</h1>
-                                        <h1 className={stud_hover === stud.Student_id ? "opacity-100 transition-all duration-100 ease-in-out" : "opacity-0 transition-all duration-100 ease-in-out"} >Credits Earned: {0}/{courseData.course_credits}</h1>
-                                    </Link>
+                                        <h1 className="transition-all duration-100 ease-in-out">
+                                            Credits Earned: {((Number(grades[stud._id]) / 100) * Number(courseData.course_credits)).toFixed(0)}
+                                            /{courseData.course_credits}
+                                        </h1>
+
+                                        {/* Input for Grades */}
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="100"
+                                            placeholder="Grade"
+                                            value={grades[stud._id] || '0'}
+                                            onChange={(e) => handleGradeChange(stud._id, e.target.value)}
+                                            className="w-20 px-2 py-1 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+
+                                        {/* Assign Grades Button */}
+                                        <button
+                                            className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
+                                            onClick={() => handleAssignGrades(stud._id)}
+                                        >
+                                            Assign Grades
+                                        </button>
+                                    </div>
                                 ))}
                             </div>
+
+
+
 
                             {/* Edit Course */}
                             <div className={tabbutton === 3 ? "h-[100%] w-[100%] bg-[#323253] flex flex-col gap-3 rounded-xl p-4 overflow-y-auto" : "hidden"}>

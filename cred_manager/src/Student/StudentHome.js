@@ -34,9 +34,18 @@ export default function HomePage() {
                     },
                 });
                 setCourses(courseResponse.data);
-            } catch (err) {
-                setError('Error fetching student data or courses: ' + (err.response?.data?.message || 'Unknown error'));
-                console.error('Error:', err);
+            } 
+            catch (err) {
+                if (err.response?.status === 400) { // Check if the error is due to an invalid token
+                    console.error('Invalid token, redirecting to /');
+                    // Clear token logic (if token is stored in localStorage or cookies)
+                    localStorage.clear(); // Adjust based on where you store the token
+                    // Redirect to login or home page
+                    window.location.href = '/';
+                } else {
+                    setError('Error fetching student data or courses: ' + (err.response?.data?.message || 'Unknown error'));
+                    console.error('Error:', err);
+                }
             }
         };
 

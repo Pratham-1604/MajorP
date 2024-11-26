@@ -1,7 +1,7 @@
 // models/gradeModel.js
 const mongoose = require('mongoose');
 const Student = require('./studentModel');
-const Test = require('./testModel');
+const Course = require('./courseModel');
 
 const gradeSchema = new mongoose.Schema({
   student_id: {
@@ -9,9 +9,9 @@ const gradeSchema = new mongoose.Schema({
     ref: 'Student',
     required: true
   },
-  test_id: {
+  course_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Test',
+    ref: 'Course',
     required: true
   },
   grade: {

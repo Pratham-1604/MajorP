@@ -121,6 +121,8 @@ exports.studentRegister = async (req, res, next) => {
     });
 
     await newStudent.save();
+    //Blockchain API do here
+  
     res.status(201).send({ message: 'Student registered successfully' });
   } catch (err) {
     next(err)
