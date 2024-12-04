@@ -1,8 +1,8 @@
 // controllers/gradeController.js
-const Grade = require('../models/gradeModel');
-const Student = require('../models/studentModel'); // Adjust the path to your Student model
-const Course = require('../models/courseModel');   // Adjust the path to your Course model
-const axios = require('axios'); // Ensure axios is installed and imported
+const Grade = require("../models/gradeModel");
+const Student = require("../models/studentModel"); // Adjust the path to your Student model
+const Course = require("../models/courseModel"); // Adjust the path to your Course model
+const axios = require("axios"); // Ensure axios is installed and imported
 
 // GET all grades
 exports.getAllGrades = async (req, res, next) => {
@@ -20,7 +20,7 @@ exports.getGradeById = async (req, res, next) => {
     const { id } = req.params;
     const grade = await Grade.findById(id);
     if (!grade) {
-      return res.status(404).json({ error: 'Grade not found' });
+      return res.status(404).json({ error: "Grade not found" });
     }
     res.json(grade);
   } catch (err) {
@@ -43,9 +43,11 @@ exports.createGrade = async (req, res, next) => {
 exports.updateGrade = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const updatedGrade = await Grade.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedGrade = await Grade.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!updatedGrade) {
-      return res.status(404).json({ error: 'Grade not found' });
+      return res.status(404).json({ error: "Grade not found" });
     }
     res.json(updatedGrade);
   } catch (err) {
@@ -59,14 +61,13 @@ exports.deleteGrade = async (req, res, next) => {
     const { id } = req.params;
     const deletedGrade = await Grade.findByIdAndDelete(id);
     if (!deletedGrade) {
-      return res.status(404).json({ error: 'Grade not found' });
+      return res.status(404).json({ error: "Grade not found" });
     }
-    res.json({ message: 'Grade deleted successfully' });
+    res.json({ message: "Grade deleted successfully" });
   } catch (err) {
     next(err);
   }
 };
-
 
 exports.assignGrade = async (req, res, next) => {
   try {
@@ -75,18 +76,20 @@ exports.assignGrade = async (req, res, next) => {
 
     // Validate input
     if (!student_id || !course_id || grade === undefined) {
-      return res.status(400).json({ message: 'Student ID, Course ID, and grade are required.' });
+      return res
+        .status(400)
+        .json({ message: "Student ID, Course ID, and grade are required." });
     }
 
     // Fetch student and course objects
     const student = await Student.findById(student_id);
     if (!student) {
-      return res.status(404).json({ message: 'Student not found.' });
+      return res.status(404).json({ message: "Student not found." });
     }
 
     const course = await Course.findById(course_id);
     if (!course) {
-      return res.status(404).json({ message: 'Course not found.' });
+      return res.status(404).json({ message: "Course not found." });
     }
 
     // Save or update grade in the database
@@ -97,37 +100,41 @@ exports.assignGrade = async (req, res, next) => {
     );
 
     // // Blockchain API
-    // const apiBody = {
-    //     email: student.email,
-    //     course_name: course.name,
-    //     grades: grade,
-    // };
+    const apiBody = {
+      "email": student.email,
+      "subjectCode": course.course_name,
+      "grade": grade,
+    };
 
-    // await axios.post('https://example.com/api/endpoint', apiBody); // Replace with actual API URL
+    await axios.post(
+      "http://localhost:5000/api/students/assign-subject-grade",
+      apiBody
+    ); // Replace with actual API URL
 
     // Return success response
     return res.status(200).json({
-      message: 'Grade assigned successfully.',
+      message: "Grade assigned successfully.",
       data: updatedGrade,
     });
   } catch (err) {
-    console.error('Error assigning grade:', err);
+    console.error("Error assigning grade:", err);
     res.status(500).json({
-      message: 'Internal server error.',
+      message: "Internal server error.",
       error: err.message,
     });
   }
 };
 
-
 exports.searchGrade = async (req, res, next) => {
   try {
     const { student_id, course_id } = req.params;
-    console.log('Searching for grade:', student_id, course_id);
+    console.log("Searching for grade:", student_id, course_id);
 
     // Validate input
     if (!student_id || !course_id) {
-      return res.status(400).json({ message: 'Student ID, Course ID are required.' });
+      return res
+        .status(400)
+        .json({ message: "Student ID, Course ID are required." });
     }
 
     // Find the grade in the database
@@ -135,7 +142,7 @@ exports.searchGrade = async (req, res, next) => {
 
     // Check if the grade was found
     if (!foundGrade) {
-      return res.status(200).json({ grade: '0' });
+      return res.status(200).json({ grade: "0" });
     }
 
     // Return the grade
@@ -143,10 +150,10 @@ exports.searchGrade = async (req, res, next) => {
       grade: foundGrade.grade,
     });
   } catch (err) {
-    console.error('Error searching for grade:', err);
+    console.error("Error searching for grade:", err);
     res.status(500).json({
-      message: 'Internal server error.',
+      message: "Internal server error.",
       error: err.message,
     });
   }
-}
+};
