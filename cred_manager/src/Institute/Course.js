@@ -273,7 +273,7 @@ const Course = () => {
                                     >
                                         <h1 className='w-[50%]' >{stud.student_firstname.concat(" ", stud.student_lastname)}</h1>
                                         <h1 className="transition-all duration-100 ease-in-out">
-                                            Credits Earned: {((Number(grades[stud._id]) / 100) * Number(courseData.course_credits)).toFixed(0)}
+                                            Credits Earned: {((Number(grades[stud._id]) / 10) * Number(courseData.course_credits)).toFixed(0)}
                                             /{courseData.course_credits}
                                         </h1>
 
@@ -281,7 +281,7 @@ const Course = () => {
                                         <input
                                             type="number"
                                             min="0"
-                                            max="100"
+                                            max="10"
                                             placeholder="Grade"
                                             value={grades[stud._id] || '0'}
                                             onChange={(e) => handleGradeChange(stud._id, e.target.value)}

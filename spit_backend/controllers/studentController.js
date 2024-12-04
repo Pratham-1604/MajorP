@@ -282,6 +282,63 @@ exports.assignStudentGrades = async (req, res) => {
   }
 };
 
+exports.assignSingleSubjectGrade = async (req, res) => {
+  try {
+    const { email, subjectCode, grade } = req.body;
+    console.log(email, subjectCode, grade);
+    // Validate input
+    if (!subjectCode || grade === undefined) {
+      return res.status(400).json({
+        message: "Subject code and grade are required",
+      });
+    }
+
+    // Find student by UID
+    const student = await Student.findOne({ "generalDetails.email": email });
+
+    if (!student) {
+      return res.status(404).json({
+        message: "Student not found",
+      });
+    }
+
+    // Find the subject in student's subject details
+    const subjectIndex = student.subjectDetails.findIndex(
+      (subject) => subject.subjectCode === subjectCode
+    );
+
+    if (subjectIndex === -1) {
+      return res.status(404).json({
+        message: "Subject not found for this student",
+      });
+    }
+
+    // Update grade for the specific subject
+    student.subjectDetails[subjectIndex].grade = grade;
+
+    // Recalculate CGPA
+    student.academicDetails.cgpa = student.calculateCGPA();
+
+    // Save updated student
+    await student.save();
+
+    res.status(200).json({
+      message: "Subject grade assigned successfully",
+      subject: {
+        subjectCode: subjectCode,
+        grade: grade,
+        newCGPA: student.academicDetails.cgpa,
+      },
+    });
+  } catch (error) {
+    console.error("Error assigning subject grade:", error);
+    res.status(500).json({
+      message: "Error assigning subject grade",
+      error: error.message,
+    });
+  }
+};
+
 // Route to increment student semester
 exports.incrementStudentSemester = async (req, res) => {
   try {
@@ -353,22 +410,28 @@ exports.getAvailableElectiveSubjects = async (req, res) => {
     }
 
     // Get course-specific elective subjects
-    const courseElectives = coursesData[student.academicDetails.courseEnrolled].electiveSubjects || [];
+    const courseElectives =
+      coursesData[student.academicDetails.courseEnrolled].electiveSubjects ||
+      [];
 
     // Filter out subjects already completed
     const completedSubjectCodes = student.subjectDetails
-      .filter(subject => subject.grade !== null)
-      .map(subject => subject.subjectCode);
+      .filter((subject) => subject.grade !== null)
+      .map((subject) => subject.subjectCode);
 
-    const availableElectives = courseElectives.filter(elective => {
+    const availableElectives = courseElectives.filter((elective) => {
       // Check if subject is not already completed
-      const isNotCompleted = !completedSubjectCodes.includes(elective.subjectCode);
+      const isNotCompleted = !completedSubjectCodes.includes(
+        elective.subjectCode
+      );
 
       // Check prerequisites (if any)
-      const prereqsMet = !elective.prerequisites || 
-        elective.prerequisites.every(prereq => 
+      const prereqsMet =
+        !elective.prerequisites ||
+        elective.prerequisites.every((prereq) =>
           student.subjectDetails.some(
-            subject => subject.subjectName === prereq && subject.grade !== null
+            (subject) =>
+              subject.subjectName === prereq && subject.grade !== null
           )
         );
 
@@ -377,7 +440,7 @@ exports.getAvailableElectiveSubjects = async (req, res) => {
 
     res.status(200).json({
       message: "Available elective subjects retrieved successfully",
-      electiveSubjects: availableElectives
+      electiveSubjects: availableElectives,
     });
   } catch (error) {
     console.error("Error retrieving elective subjects:", error);
@@ -408,33 +471,37 @@ exports.addSubjectsForSemester = async (req, res) => {
     const nextSemester = student.academicDetails.currentSemester;
 
     // Create core subject entries (mandatory)
-    const coreSubjects = compulsorySubjects.map(subject => ({
-      subjectCode: `${course}-${nextSemester}-${subject.subjectName.replace(/\s+/g, '')}`,
+    const coreSubjects = compulsorySubjects.map((subject) => ({
+      subjectCode: `${course}-${nextSemester}-${subject.subjectName.replace(
+        /\s+/g,
+        ""
+      )}`,
       subjectName: subject.subjectName,
       credits: subject.credits,
       grade: null,
       semester: nextSemester,
-      type: 'core'
+      type: "core",
     }));
 
     // Create elective subject entries
-    const electiveSubjectEntries = electiveSubjects.map(elective => ({
+    const electiveSubjectEntries = electiveSubjects.map((elective) => ({
       subjectCode: elective.subjectCode,
       subjectName: elective.subjectName,
       credits: elective.credits,
       grade: null,
       semester: nextSemester,
-      type: 'elective'
+      type: "elective",
     }));
 
     // Validate total credits
-    const totalCredits = coreSubjects.reduce((sum, subject) => sum + subject.credits, 0) +
+    const totalCredits =
+      coreSubjects.reduce((sum, subject) => sum + subject.credits, 0) +
       electiveSubjectEntries.reduce((sum, subject) => sum + subject.credits, 0);
 
     if (totalCredits < 15 || totalCredits > 25) {
       return res.status(400).json({
         message: "Total credits must be between 15 and 25",
-        currentCredits: totalCredits
+        currentCredits: totalCredits,
       });
     }
 
@@ -443,7 +510,7 @@ exports.addSubjectsForSemester = async (req, res) => {
 
     // Remove existing subjects for this semester
     student.subjectDetails = student.subjectDetails.filter(
-      subject => subject.semester !== nextSemester
+      (subject) => subject.semester !== nextSemester
     );
 
     // Add new subjects
@@ -455,9 +522,8 @@ exports.addSubjectsForSemester = async (req, res) => {
     res.status(200).json({
       message: "Subjects added successfully",
       addedSubjects: newSubjects,
-      totalCredits: totalCredits
+      totalCredits: totalCredits,
     });
-
   } catch (error) {
     console.error("Error adding subjects:", error);
     res.status(500).json({

@@ -69,7 +69,16 @@ coursesData = {
         subjectCode: "CSE-ELEC-006",
         credits: 4,
       },
-      
+      {
+        subjectName: "NLP",
+        subjectCode: "CSE-ELEC-007",
+        credits: 4,
+      },
+      {
+        subjectName: "Deep Learning",
+        subjectCode: "CSE-ELEC-008",
+        credits: 4,
+      },
     ],
     careerOpportunities: [
       "Software Engineer",

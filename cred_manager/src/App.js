@@ -30,7 +30,7 @@ function App() {
           <Route path="/logout" element={<Logout />} /> 
           <Route path="/" element={<Home />} />
           <Route path="/institution_home" element={<InstitutionHome />} />
-          <Route exact path="/add_course" element={<AddCourse />} />
+          <Route path="/add_course" element={<AddCourse />} />
           <Route path="/institute_profile" element={<About />} />
           <Route path="/courses/:courseId" element={<Course />} />
           <Route path="/courses" element={<CoursesList />} />

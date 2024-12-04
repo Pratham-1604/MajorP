@@ -10,6 +10,7 @@ const {
   incrementStudentSemester,
   getAvailableElectiveSubjects,
   addSubjectsForSemester,
+  assignSingleSubjectGrade,
 } = require("../controllers/studentController");
 
 // Existing routes
@@ -25,5 +26,5 @@ router.post("/:uid/assign-grades", assignStudentGrades);
 router.post("/:uid/increment-semester", incrementStudentSemester);
 router.get("/:uid/available-electives", getAvailableElectiveSubjects);
 router.post("/:uid/add-semester-subjects", addSubjectsForSemester);
-
+router.post("/assign-subject-grade", assignSingleSubjectGrade);
 module.exports = router;
